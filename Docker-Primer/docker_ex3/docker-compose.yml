@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+
+  # 后端服务
+  app:
+    build: ./backend
+    container_name: app
+    ports:
+      - "9900:9900"          # 宿主机 9900 ↔ 容器 9900
+    environment:
+      - REDIS_HOST=redis     # 如有需要，可用到 redis
+    depends_on:
+      - redis
+
+  # 前端服务
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "3901:3000"          # 宿主机 3901 ↔ 容器 3000
+    environment:
+      - REACT_APP_BACKEND_URL=http://app:9900
+    depends_on:
+      - app

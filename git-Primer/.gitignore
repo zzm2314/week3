@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+
+# VSCode 设置
+.vscode/
